@@ -18,7 +18,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +26,9 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Бур Пустоты. ПКМ — пробивает тоннель 3×3 на 32 блока в направлении взгляда.
+ * Бур Пустоты. ПКМ — пробивает тоннель 3×3 на 32 блока. Shift+ПКМ — сменить режим:
+ *  • «Вглубь» — по направлению взгляда (вверх, вниз, вбок — куда смотришь);
+ *  • «По поверхности» — строго горизонтально на уровне игрока, сколько бы ты ни смотрел вниз/вверх.
  * Ломает только землю, камень и песок (тег absolutum:drillable). Блоки просто исчезают:
  * ничего не выпадает и соседние блоки не обновляются — чтобы не нагружать компьютер.
  */
@@ -41,8 +42,18 @@ public class VoidDrillItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+        if (player.isShiftKeyDown()) {
+            if (!level.isClientSide) {
+                boolean surface = !isSurfaceMode(stack);
+                stack.getOrCreateTag().putBoolean(MODE_TAG, surface);
+                player.displayClientMessage(Component.translatable("message.absolutum.void_drill.mode",
+                        modeName(surface)).withStyle(ChatFormatting.LIGHT_PURPLE), true);
+                if (player instanceof ServerPlayer sp) ModAdvancements.award(sp, "drill_mode");
+            }
+            return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+        }
         if (level instanceof ServerLevel server) {
-            int removed = drill(server, player);
+            int removed = isSurfaceMode(stack) ? drillSurface(server, player) : drill(server, player);
             if (removed > 0) {
                 level.playSound(null, player.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 0.6F, 0.5F);
                 if (player instanceof ServerPlayer sp) ModAdvancements.award(sp, "tunnel");
@@ -52,11 +63,49 @@ public class VoidDrillItem extends Item {
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
     }
 
+    public static final String MODE_TAG = "SurfaceMode";
+
+    public static boolean isSurfaceMode(ItemStack stack) {
+        return stack.hasTag() && stack.getTag().getBoolean(MODE_TAG);
+    }
+
+    private static Component modeName(boolean surface) {
+        return Component.translatable(surface ? "mode.absolutum.surface" : "mode.absolutum.depth");
+    }
+
+    /** Убирает блок, если он из списка; возвращает 1, если убрал. */
+    private static int erase(ServerLevel level, Player player, BlockPos pos, Set<BlockPos> visited) {
+        if (!visited.add(pos) || !level.isLoaded(pos)) return 0;
+        if (!level.getBlockState(pos).is(Absolutum.DRILLABLE)) return 0;
+        if (!level.mayInteract(player, pos)) return 0;
+        level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+        return 1;
+    }
+
+    /** Режим «По поверхности»: горизонтальный тоннель 3 в ширину и 3 в высоту от уровня ног. */
+    private static int drillSurface(ServerLevel level, Player player) {
+        Vec3 look = player.getLookAngle();
+        Vec3 dir = new Vec3(look.x, 0, look.z);
+        if (dir.lengthSqr() < 1.0E-4) dir = Vec3.directionFromRotation(0, player.getYRot());
+        dir = dir.normalize();
+        Vec3 feet = player.position().add(0, 0.01, 0);
+        Set<BlockPos> visited = new HashSet<>();
+        int removed = 0;
+        for (double d = 0.5; d <= RANGE; d += 0.5) {
+            BlockPos center = BlockPos.containing(feet.add(dir.scale(d)));
+            for (int dx = -RADIUS; dx <= RADIUS; dx++)
+                for (int dz = -RADIUS; dz <= RADIUS; dz++)
+                    for (int dy = 0; dy <= 2; dy++)
+                        removed += erase(level, player, center.offset(dx, dy, dz), visited);
+        }
+        return removed;
+    }
+
+    /** Режим «Вглубь»: тоннель 3×3 по направлению взгляда. */
     private static int drill(ServerLevel level, Player player) {
         Vec3 eye = player.getEyePosition();
         Vec3 look = player.getLookAngle();
         Set<BlockPos> visited = new HashSet<>();
-        BlockState air = Blocks.AIR.defaultBlockState();
         int removed = 0;
 
         for (double d = 0.5; d <= RANGE; d += 0.5) {
@@ -64,13 +113,7 @@ public class VoidDrillItem extends Item {
             for (int dx = -RADIUS; dx <= RADIUS; dx++) {
                 for (int dy = -RADIUS; dy <= RADIUS; dy++) {
                     for (int dz = -RADIUS; dz <= RADIUS; dz++) {
-                        BlockPos pos = center.offset(dx, dy, dz);
-                        if (!visited.add(pos) || !level.isLoaded(pos)) continue;
-                        if (!level.getBlockState(pos).is(Absolutum.DRILLABLE)) continue;
-                        if (!level.mayInteract(player, pos)) continue; // уважаем защиту спавна/приватов
-                        // Только обновление у клиентов: без дропа, без обновления соседей
-                        level.setBlock(pos, air, Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
-                        removed++;
+                        removed += erase(level, player, center.offset(dx, dy, dz), visited);
                     }
                 }
             }
@@ -83,6 +126,8 @@ public class VoidDrillItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         Tooltips.add(stack, tooltip, ChatFormatting.LIGHT_PURPLE);
+        tooltip.add(Component.translatable("tooltip.absolutum.void_drill.mode", modeName(isSurfaceMode(stack)))
+                .withStyle(ChatFormatting.LIGHT_PURPLE));
         tooltip.add(Component.translatable("tooltip.absolutum.void_drill.hint").withStyle(ChatFormatting.GRAY));
     }
 }

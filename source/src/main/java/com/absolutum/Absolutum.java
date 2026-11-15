@@ -55,6 +55,8 @@ public class Absolutum {
     public static final RegistryObject<Item> SHOVEL  = item("absolute_shovel",  () -> new AbsoluteTools.Shovel(props()));
     public static final RegistryObject<Item> HOE     = item("absolute_hoe",     () -> new AbsoluteTools.Hoe(props()));
     public static final RegistryObject<Item> DRILL   = item("void_drill",       () -> new VoidDrillItem(props()));
+    public static final RegistryObject<Item> BREAKER = item("reality_breaker",  () -> new RealityBreakerItem(props()));
+    public static final RegistryObject<Item> CROWN   = item("absolute_crown",   () -> new AbsoluteCrownItem(props()));
 
     public static final RegistryObject<CreativeModeTab> TAB = TABS.register("main", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.absolutum"))

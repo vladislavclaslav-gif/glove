@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "item": "absolutum:absolute_crown"
+    },
+    "title": {
+      "translate": "advancements.absolutum.absolute_crown.title"
+    },
+    "description": {
+      "translate": "advancements.absolutum.absolute_crown.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "absolutum:absolute_crown"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "parent": "absolutum:root",
+  "rewards": {
+    "experience": 1000
+  }
+}

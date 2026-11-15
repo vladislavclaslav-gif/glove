@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "absolutum:absolute_crown"
+    },
+    "title": {
+      "translate": "advancements.absolutum.godlike.title"
+    },
+    "description": {
+      "translate": "advancements.absolutum.godlike.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "code": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "absolutum:absolute_crown",
+  "rewards": {
+    "experience": 2000
+  }
+}

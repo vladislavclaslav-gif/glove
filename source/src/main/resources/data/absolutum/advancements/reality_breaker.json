@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "item": "absolutum:reality_breaker"
+    },
+    "title": {
+      "translate": "advancements.absolutum.reality_breaker.title"
+    },
+    "description": {
+      "translate": "advancements.absolutum.reality_breaker.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "absolutum:reality_breaker"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "parent": "absolutum:root",
+  "rewards": {
+    "experience": 1000
+  }
+}

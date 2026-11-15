@@ -110,6 +110,30 @@
           }
         ]
       }
+    },
+    "reality_breaker": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "absolutum:reality_breaker"
+            ]
+          }
+        ]
+      }
+    },
+    "absolute_crown": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "absolutum:absolute_crown"
+            ]
+          }
+        ]
+      }
     }
   },
   "parent": "absolutum:root",
