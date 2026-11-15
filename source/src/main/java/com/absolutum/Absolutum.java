@@ -1,6 +1,10 @@
 package com.absolutum;
 
 import com.absolutum.item.*;
+import com.absolutum.upgrader.UpgraderMenu;
+import com.absolutum.upgrader.UpgraderNetwork;
+import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -37,6 +41,7 @@ public class Absolutum {
     public static final TagKey<Block> DRILLABLE = BlockTags.create(id("drillable"));
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
+    public static final DeferredRegister<MenuType<?>> MENUS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MODID);
     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
     private static Item.Properties props() {
@@ -57,6 +62,10 @@ public class Absolutum {
     public static final RegistryObject<Item> DRILL   = item("void_drill",       () -> new VoidDrillItem(props()));
     public static final RegistryObject<Item> BREAKER = item("reality_breaker",  () -> new RealityBreakerItem(props()));
     public static final RegistryObject<Item> CROWN   = item("absolute_crown",   () -> new AbsoluteCrownItem(props()));
+    public static final RegistryObject<Item> UPGRADER = item("absolute_upgrader", () -> new AbsoluteUpgraderItem(props()));
+
+    public static final RegistryObject<MenuType<UpgraderMenu>> UPGRADER_MENU =
+            MENUS.register("upgrader", () -> new MenuType<>(UpgraderMenu::new, FeatureFlags.DEFAULT_FLAGS));
 
     public static final RegistryObject<CreativeModeTab> TAB = TABS.register("main", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.absolutum"))
@@ -68,5 +77,7 @@ public class Absolutum {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         ITEMS.register(modBus);
         TABS.register(modBus);
+        MENUS.register(modBus);
+        UpgraderNetwork.register();
     }
 }

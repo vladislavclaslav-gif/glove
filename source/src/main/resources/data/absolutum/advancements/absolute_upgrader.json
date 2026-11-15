@@ -1,0 +1,32 @@
+{
+  "display": {
+    "icon": {
+      "item": "absolutum:absolute_upgrader"
+    },
+    "title": {
+      "translate": "advancements.absolutum.absolute_upgrader.title"
+    },
+    "description": {
+      "translate": "advancements.absolutum.absolute_upgrader.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "absolutum:absolute_upgrader"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "parent": "absolutum:root"
+}

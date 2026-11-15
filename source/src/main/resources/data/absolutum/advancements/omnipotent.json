@@ -134,6 +134,18 @@
           }
         ]
       }
+    },
+    "absolute_upgrader": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "absolutum:absolute_upgrader"
+            ]
+          }
+        ]
+      }
     }
   },
   "parent": "absolutum:root",

@@ -147,6 +147,18 @@
           }
         ]
       }
+    },
+    "absolute_upgrader": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "absolutum:absolute_upgrader"
+            ]
+          }
+        ]
+      }
     }
   },
   "requirements": [
@@ -161,7 +173,8 @@
       "absolute_hoe",
       "void_drill",
       "reality_breaker",
-      "absolute_crown"
+      "absolute_crown",
+      "absolute_upgrader"
     ]
   ]
 }
