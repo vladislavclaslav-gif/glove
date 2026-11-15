@@ -1,0 +1,9 @@
+{
+  "item.absolutearsenal.absolute_sword": "Абсолютный меч",
+  "item.absolutearsenal.absolute_shield": "Абсолютный щит",
+  "tooltip.absolutearsenal.absolute_sword": "Убивает любого моба с одного удара",
+  "tooltip.absolutearsenal.absolute_shield": "Защищает от любого урона",
+  "tooltip.absolutearsenal.absolute_shield.hint": "Работает, пока в любой руке",
+  "death.attack.absolutearsenal.annihilation": "%1$s стёрт из реальности",
+  "death.attack.absolutearsenal.annihilation.player": "%1$s стёрт из реальности игроком %2$s"
+}

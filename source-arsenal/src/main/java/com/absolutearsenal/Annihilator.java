@@ -1,4 +1,4 @@
-package com.absoluteglove;
+package com.absolutearsenal;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
@@ -22,7 +22,7 @@ import java.util.List;
  * 4) удаление сущности из мира.
  * Плюс через 2 секунды проверка: если моб каким-то образом "воскрес" — он удаляется.
  */
-@Mod.EventBusSubscriber(modid = AbsoluteGlove.MODID)
+@Mod.EventBusSubscriber(modid = AbsoluteArsenal.MODID)
 public final class Annihilator {
 
     private static final int RECHECK_TICKS = 40;
@@ -32,9 +32,10 @@ public final class Annihilator {
 
     public static void annihilate(LivingEntity target, Player attacker) {
         if (!(target.level() instanceof ServerLevel level)) return;
+        if (ShieldProtection.isProtected(target)) return; // Абсолютный щит сильнее меча
 
         DamageSource source = new DamageSource(
-                level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(AbsoluteGlove.ANNIHILATION),
+                level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(AbsoluteArsenal.ANNIHILATION),
                 attacker);
 
         // 1. Бесконечный урон
@@ -53,7 +54,8 @@ public final class Annihilator {
         }
 
         // 4. Если моб из мода всё равно жив — просто стираем его из мира
-        if (target.isAlive()) {
+        // (игроков из мира не стираем — это ломает сервер)
+        if (target.isAlive() && !(target instanceof Player)) {
             target.remove(Entity.RemovalReason.KILLED);
             return;
         }
@@ -69,7 +71,7 @@ public final class Annihilator {
             Pending p = it.next();
             if (p.entity.isRemoved()) { it.remove(); continue; }
             if (--p.ticksLeft <= 0) {
-                if (p.entity.isAlive()) { // "воскрес" — удаляем окончательно
+                if (p.entity.isAlive() && !(p.entity instanceof Player)) { // "воскрес" — удаляем окончательно
                     p.entity.remove(Entity.RemovalReason.KILLED);
                 }
                 it.remove();

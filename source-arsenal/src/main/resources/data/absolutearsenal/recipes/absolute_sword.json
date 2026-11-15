@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": ["S", "N", "R"],
+  "key": {
+    "S": { "item": "minecraft:nether_star" },
+    "N": { "item": "minecraft:netherite_ingot" },
+    "R": { "item": "minecraft:blaze_rod" }
+  },
+  "result": { "item": "absolutearsenal:absolute_sword" }
+}
