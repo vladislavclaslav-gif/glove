@@ -7,7 +7,7 @@
 ## Как скачать и установить
 1. Нажми на файл **`absolutum-1.20.1-1.1.1.jar`** выше → справа кнопка **Download raw file** (значок загрузки).
 2. Положи файл в папку `mods` (CurseForge: три точки возле «Play» → **Open Folder** → `mods`).
-3. **Удали из `mods` старые файлы** старые `absolutum-…jar`, `absoluteglove-…jar` и `absolutearsenal-…jar` — всё уже есть в новой версии.
+3. **Удали из `mods` старые файлы** `absolutum-…jar`, `absoluteglove-…jar` и `absolutearsenal-…jar` — всё уже есть в новой версии.
 
 ## Предметы
 | Предмет | Что делает | Крафт (без формы, в любом порядке) |
