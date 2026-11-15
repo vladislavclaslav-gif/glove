@@ -18,6 +18,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,7 +30,7 @@ import java.util.Set;
  * Бур Пустоты. ПКМ — пробивает тоннель 3×3 на 32 блока. Shift+ПКМ — сменить режим:
  *  • «Вглубь» — по направлению взгляда (вверх, вниз, вбок — куда смотришь);
  *  • «По поверхности» — строго горизонтально на уровне игрока, сколько бы ты ни смотрел вниз/вверх.
- * Ломает только землю, камень и песок (тег absolutum:drillable). Блоки просто исчезают:
+ * Ломает землю, камень, песок и все растения (тег absolutum:drillable). Блоки просто исчезают:
  * ничего не выпадает и соседние блоки не обновляются — чтобы не нагружать компьютер.
  */
 public class VoidDrillItem extends Item {
@@ -76,9 +77,11 @@ public class VoidDrillItem extends Item {
     /** Убирает блок, если он из списка; возвращает 1, если убрал. */
     private static int erase(ServerLevel level, Player player, BlockPos pos, Set<BlockPos> visited) {
         if (!visited.add(pos) || !level.isLoaded(pos)) return 0;
-        if (!level.getBlockState(pos).is(Absolutum.DRILLABLE)) return 0;
+        BlockState state = level.getBlockState(pos);
+        if (!state.is(Absolutum.DRILLABLE)) return 0;
         if (!level.mayInteract(player, pos)) return 0;
-        level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
+        // Подводные растения (водоросли, морская трава) заменяются водой, а не воздухом — без пустот под водой
+        level.setBlock(pos, state.getFluidState().createLegacyBlock(), Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE);
         return 1;
     }
 
