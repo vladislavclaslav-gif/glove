@@ -58,7 +58,8 @@ public class AbsoluteCrownItem extends ArmorItem {
         EFFECTS.put(MobEffects.HEALTH_BOOST, 4);         // +10 сердец к максимуму
     }
 
-    private static final int DURATION = 400;
+    /** Бессрочные эффекты: накладываются один раз и не обновляются (иначе "Прибавка здоровья" при обновлении срезала здоровье). */
+    private static final int DURATION = MobEffectInstance.INFINITE_DURATION;
 
     private static final ArmorMaterial MATERIAL = new ArmorMaterial() {
         @Override public int getDurabilityForType(Type type) { return 0; } // неломаемая
@@ -83,7 +84,7 @@ public class AbsoluteCrownItem extends ArmorItem {
         if (player.tickCount % 20 == 0) {
             for (Map.Entry<MobEffect, Integer> e : EFFECTS.entrySet()) {
                 MobEffectInstance cur = player.getEffect(e.getKey());
-                if (cur == null || cur.getAmplifier() < e.getValue() || cur.getDuration() < DURATION - 40) {
+                if (cur == null || cur.getAmplifier() < e.getValue() || !cur.isInfiniteDuration()) {
                     player.addEffect(new MobEffectInstance(e.getKey(), DURATION, e.getValue(), true, false, true));
                 }
             }
