@@ -1,0 +1,6 @@
+{
+  "item.absoluteglove.absolute_glove": "Перчатка Абсолюта",
+  "tooltip.absoluteglove.absolute_glove": "Убивает любого моба с одного удара",
+  "death.attack.absoluteglove.annihilation": "%1$s стёрт из реальности",
+  "death.attack.absoluteglove.annihilation.player": "%1$s стёрт из реальности игроком %2$s"
+}

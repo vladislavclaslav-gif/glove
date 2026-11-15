@@ -1,0 +1,6 @@
+{
+  "item.absoluteglove.absolute_glove": "Absolute Glove",
+  "tooltip.absoluteglove.absolute_glove": "Kills any mob in one hit",
+  "death.attack.absoluteglove.annihilation": "%1$s was erased from existence",
+  "death.attack.absoluteglove.annihilation.player": "%1$s was erased from existence by %2$s"
+}
