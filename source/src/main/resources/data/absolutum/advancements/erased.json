@@ -1,0 +1,41 @@
+{
+  "display": {
+    "icon": {
+      "item": "absolutum:absolute_sword"
+    },
+    "title": {
+      "translate": "advancements.absolutum.erased.title"
+    },
+    "description": {
+      "translate": "advancements.absolutum.erased.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "equipment": {
+                "mainhand": {
+                  "items": [
+                    "absolutum:absolute_sword",
+                    "absolutum:absolute_glove"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "absolutum:absolute_sword"
+}

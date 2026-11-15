@@ -1,0 +1,153 @@
+{
+  "display": {
+    "icon": {
+      "item": "absolutum:absolute_sword"
+    },
+    "title": {
+      "translate": "advancements.absolutum.root.title"
+    },
+    "description": {
+      "translate": "advancements.absolutum.root.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "minecraft:textures/block/crying_obsidian.png"
+  },
+  "criteria": {
+    "dirt": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:dirt"
+            ]
+          }
+        ]
+      }
+    },
+    "absolute_glove": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "absolutum:absolute_glove"
+            ]
+          }
+        ]
+      }
+    },
+    "absolute_sword": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "absolutum:absolute_sword"
+            ]
+          }
+        ]
+      }
+    },
+    "absolute_shield": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "absolutum:absolute_shield"
+            ]
+          }
+        ]
+      }
+    },
+    "absolute_pickaxe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "absolutum:absolute_pickaxe"
+            ]
+          }
+        ]
+      }
+    },
+    "absolute_axe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "absolutum:absolute_axe"
+            ]
+          }
+        ]
+      }
+    },
+    "absolute_shovel": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "absolutum:absolute_shovel"
+            ]
+          }
+        ]
+      }
+    },
+    "absolute_hoe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "absolutum:absolute_hoe"
+            ]
+          }
+        ]
+      }
+    },
+    "void_drill": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "absolutum:void_drill"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "recipes": [
+      "absolutum:absolute_glove",
+      "absolutum:absolute_sword",
+      "absolutum:absolute_shield",
+      "absolutum:absolute_pickaxe",
+      "absolutum:absolute_axe",
+      "absolutum:absolute_shovel",
+      "absolutum:absolute_hoe",
+      "absolutum:void_drill"
+    ]
+  },
+  "requirements": [
+    [
+      "dirt",
+      "absolute_glove",
+      "absolute_sword",
+      "absolute_shield",
+      "absolute_pickaxe",
+      "absolute_axe",
+      "absolute_shovel",
+      "absolute_hoe",
+      "void_drill"
+    ]
+  ]
+}

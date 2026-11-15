@@ -1,0 +1,32 @@
+{
+  "display": {
+    "icon": {
+      "item": "absolutum:absolute_shovel"
+    },
+    "title": {
+      "translate": "advancements.absolutum.absolute_shovel.title"
+    },
+    "description": {
+      "translate": "advancements.absolutum.absolute_shovel.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "absolutum:absolute_shovel"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "parent": "absolutum:root"
+}

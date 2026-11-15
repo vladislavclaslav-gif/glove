@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "item": "absolutum:void_drill"
+    },
+    "title": {
+      "translate": "advancements.absolutum.tunnel.title"
+    },
+    "description": {
+      "translate": "advancements.absolutum.tunnel.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "code": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "absolutum:void_drill"
+}

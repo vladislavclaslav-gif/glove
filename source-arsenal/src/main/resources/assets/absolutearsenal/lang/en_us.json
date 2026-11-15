@@ -1,9 +1,0 @@
-{
-  "item.absolutearsenal.absolute_sword": "Absolute Sword",
-  "item.absolutearsenal.absolute_shield": "Absolute Shield",
-  "tooltip.absolutearsenal.absolute_sword": "Kills any mob in one hit",
-  "tooltip.absolutearsenal.absolute_shield": "Protects from any damage",
-  "tooltip.absolutearsenal.absolute_shield.hint": "Works while held in either hand",
-  "death.attack.absolutearsenal.annihilation": "%1$s was erased from existence",
-  "death.attack.absolutearsenal.annihilation.player": "%1$s was erased from existence by %2$s"
-}
