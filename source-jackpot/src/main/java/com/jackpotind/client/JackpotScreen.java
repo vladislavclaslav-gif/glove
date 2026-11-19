@@ -39,6 +39,8 @@ public class JackpotScreen extends AbstractContainerScreen<UpgraderMenu> {
     private static final int COLS = 9, ROWS = 9, CELL = 18;          // каталог
 
     private Button spinButton;
+    private Button modeButton;
+    private int shownMode = -1;
     private EditBox search;
     private boolean catalogOpen;
     private List<Item> allItems = List.of();
@@ -67,13 +69,17 @@ public class JackpotScreen extends AbstractContainerScreen<UpgraderMenu> {
     protected void init() {
         super.init();
         spinButton = addRenderableWidget(Button.builder(Component.translatable("gui.jackpotind.spin"),
-                b -> press(UpgraderMenu.BTN_SPIN)).bounds(leftPos + 124, topPos + 66, 48, 18).build());
-        addRenderableWidget(Button.builder(Component.literal("-"),
-                b -> press(hasShiftDown() ? UpgraderMenu.BTN_MINUS10 : UpgraderMenu.BTN_MINUS))
+                b -> press(UpgraderMenu.BTN_SPIN)).bounds(leftPos + 124, topPos + 64, 48, 15).build());
+        addRenderableWidget(Button.builder(Component.literal("-"), b -> press(percentMode()
+                        ? (hasShiftDown() ? UpgraderMenu.BTN_PCT_MINUS1 : UpgraderMenu.BTN_PCT_MINUS5)
+                        : (hasShiftDown() ? UpgraderMenu.BTN_MINUS10 : UpgraderMenu.BTN_MINUS)))
                 .bounds(leftPos + 124, topPos + 50, 12, 12).build());
-        addRenderableWidget(Button.builder(Component.literal("+"),
-                b -> press(hasShiftDown() ? UpgraderMenu.BTN_PLUS10 : UpgraderMenu.BTN_PLUS))
+        addRenderableWidget(Button.builder(Component.literal("+"), b -> press(percentMode()
+                        ? (hasShiftDown() ? UpgraderMenu.BTN_PCT_PLUS1 : UpgraderMenu.BTN_PCT_PLUS5)
+                        : (hasShiftDown() ? UpgraderMenu.BTN_PLUS10 : UpgraderMenu.BTN_PLUS)))
                 .bounds(leftPos + 160, topPos + 50, 12, 12).build());
+        modeButton = addRenderableWidget(Button.builder(modeText(), b -> press(UpgraderMenu.BTN_MODE))
+                .bounds(leftPos + 124, topPos + 81, 48, 12).build());
 
         search = new EditBox(font, leftPos + 8, topPos + 6, 140, 12, Component.empty());
         search.setMaxLength(50);
@@ -99,6 +105,12 @@ public class JackpotScreen extends AbstractContainerScreen<UpgraderMenu> {
             minecraft.getTextureManager().release(WHEEL_ID);
             wheelTexture = null;
         }
+    }
+
+    private boolean percentMode() { return menu.mode() == UpgraderMenu.MODE_PERCENT; }
+
+    private Component modeText() {
+        return Component.translatable(percentMode() ? "gui.jackpotind.mode_percent" : "gui.jackpotind.mode_target");
     }
 
     private void press(int id) {
@@ -196,10 +208,15 @@ public class JackpotScreen extends AbstractContainerScreen<UpgraderMenu> {
             }
         } else if (!resultSoundPlayed && menu.result() != 0) {
             resultSoundPlayed = true;
-            if (menu.result() == 1) play(SoundEvents.PLAYER_LEVELUP, 1.0f, 0.8f);
+            if (menu.result() == 1 && menu.secret() > 0) play(SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
+            else if (menu.result() == 1) play(SoundEvents.PLAYER_LEVELUP, 1.0f, 0.8f);
             else play(SoundEvents.VILLAGER_NO, 0.8f, 0.8f);
         }
         spinButton.active = !menu.isSpinning() && !animating() && menu.chance() > 0;
+        if (shownMode != menu.mode()) {
+            shownMode = menu.mode();
+            modeButton.setMessage(modeText());
+        }
     }
 
     private static boolean isOver(double mx, double my, int x, int y, int w, int h) {
@@ -241,15 +258,20 @@ public class JackpotScreen extends AbstractContainerScreen<UpgraderMenu> {
         if (hoverTarget) g.fill(x + TX - 1, y + TY - 1, x + TX + 17, y + TY + 17, 0x60FFFFFF);
         Item target = menu.target();
         if (target != null) {
-            ItemStack st = new ItemStack(target, menu.count());
+            ItemStack st = new ItemStack(target);
             g.renderItem(st, x + TX, y + TY);
-            g.renderItemDecorations(font, st, x + TX, y + TY);
+            int n = Math.max(1, menu.prize());
+            g.renderItemDecorations(font, st, x + TX, y + TY, n > 1 ? String.valueOf(n) : null);
         } else {
             g.drawCenteredString(font, "?", x + TX + 8, y + TY + 4, 0xFF50E6FF);
         }
     }
 
     private int bulb(int i) {
+        if (showingResult() && menu.result() == 1 && menu.secret() > 0) {
+            int[] rainbow = {0xFFFFD700, 0xFFFF7A00, 0xFFFF50E6, 0xFF50E6FF, 0xFF3CFF7A};
+            return rainbow[Math.floorMod(i + ticks, rainbow.length)];
+        }
         if (showingResult()) return menu.result() == 1 ? (i % 2 == 0 ? 0xFF3CFF7A : 0xFFB6FFCF) : (i % 2 == 0 ? 0xFFFF3B3B : 0xFF701818);
         return switch (Math.floorMod(i, 3)) {
             case 0 -> 0xFFFFE14A;
@@ -264,12 +286,18 @@ public class JackpotScreen extends AbstractContainerScreen<UpgraderMenu> {
         g.drawCenteredString(font, Component.translatable("gui.jackpotind.stake"), 30, 20, 0xFFFFC828);
         g.drawCenteredString(font, Component.translatable("gui.jackpotind.target"), TX + 8, 20, 0xFF50E6FF);
         g.drawString(font, Component.translatable("gui.jackpotind.boosts"), 4, 54, 0xFFFF9CF0, false);
-        g.drawCenteredString(font, "x" + menu.count(), 148, 52, 0xFFFFFFFF);
+        if (percentMode()) {
+            g.drawCenteredString(font, menu.percent() + "%", 148, 52, 0xFF3CFF7A);
+        } else {
+            g.drawCenteredString(font, "x" + menu.count(), 148, 52, 0xFFFFFFFF);
+        }
 
         // в центре колеса — шанс, после прокрутки — результат
         Component center;
         if (showingResult()) {
-            center = menu.result() == 1
+            center = menu.result() == 1 && menu.secret() > 0
+                    ? Component.translatable("gui.jackpotind.secret", menu.secret()).withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD)
+                    : menu.result() == 1
                     ? Component.translatable("gui.jackpotind.win").withStyle(ChatFormatting.GREEN, ChatFormatting.BOLD)
                     : Component.translatable("gui.jackpotind.lose").withStyle(ChatFormatting.RED, ChatFormatting.BOLD);
             g.pose().pushPose();
@@ -279,6 +307,7 @@ public class JackpotScreen extends AbstractContainerScreen<UpgraderMenu> {
         }
         String pct = animating() ? "..." : String.format(Locale.ROOT, "%.0f%%", menu.chance() * 100);
         if (!animating() && menu.chance() > 0 && menu.chance() < 0.01) pct = "<1%";
+        if (!animating() && percentMode() && menu.hasStake() && menu.target() != null && menu.prize() < 1) pct = Component.translatable("gui.jackpotind.low").getString();
         g.pose().pushPose();
         g.pose().translate(0, 0, 200);
         g.drawCenteredString(font, pct, CX, CY - 4, 0xFFFFFFFF);
@@ -310,6 +339,11 @@ public class JackpotScreen extends AbstractContainerScreen<UpgraderMenu> {
                         ItemValues.format(ItemValues.get(minecraft.level, target))).withStyle(ChatFormatting.GRAY));
             }
             lines.add(Component.translatable("gui.jackpotind.pick_target").withStyle(ChatFormatting.AQUA));
+            if (menu.chosenTarget() != null) {
+                lines.add(Component.translatable("gui.jackpotind.clear_target").withStyle(ChatFormatting.GRAY));
+            } else if (percentMode()) {
+                lines.add(Component.translatable("gui.jackpotind.own_item").withStyle(ChatFormatting.GREEN));
+            }
             g.renderComponentTooltip(font, lines, mouseX, mouseY);
         }
         if (hoveredSlot != null && !hoveredSlot.hasItem() && menu.getCarried().isEmpty()) {
@@ -317,6 +351,9 @@ public class JackpotScreen extends AbstractContainerScreen<UpgraderMenu> {
             if (idx >= UpgraderMenu.SLOT_BOOST && idx < UpgraderMenu.SIZE) {
                 g.renderComponentTooltip(font, List.of(Component.translatable("gui.jackpotind.boost_hint")
                         .withStyle(ChatFormatting.LIGHT_PURPLE)), mouseX, mouseY);
+            } else if (idx == UpgraderMenu.SLOT_INPUT && percentMode()) {
+                g.renderComponentTooltip(font, List.of(Component.translatable("gui.jackpotind.stake_hint").withStyle(ChatFormatting.GOLD),
+                        Component.translatable("gui.jackpotind.percent_hint").withStyle(ChatFormatting.GREEN)), mouseX, mouseY);
             } else if (idx == UpgraderMenu.SLOT_INPUT) {
                 g.renderComponentTooltip(font, List.of(Component.translatable("gui.jackpotind.stake_hint")
                         .withStyle(ChatFormatting.GOLD)), mouseX, mouseY);
@@ -386,6 +423,10 @@ public class JackpotScreen extends AbstractContainerScreen<UpgraderMenu> {
                     }
                 }
             }
+            return true;
+        }
+        if (isOver(mx, my, leftPos + TX - 1, topPos + TY - 1, 18, 18) && !menu.isSpinning() && button == 1) {
+            press(UpgraderMenu.BTN_CLEAR_TARGET);
             return true;
         }
         if (isOver(mx, my, leftPos + TX - 1, topPos + TY - 1, 18, 18) && !menu.isSpinning()) {
