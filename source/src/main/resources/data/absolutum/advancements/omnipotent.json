@@ -99,18 +99,6 @@
         ]
       }
     },
-    "void_drill": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "absolutum:void_drill"
-            ]
-          }
-        ]
-      }
-    },
     "reality_breaker": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
@@ -130,18 +118,6 @@
           {
             "items": [
               "absolutum:absolute_crown"
-            ]
-          }
-        ]
-      }
-    },
-    "absolute_upgrader": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "absolutum:absolute_upgrader"
             ]
           }
         ]

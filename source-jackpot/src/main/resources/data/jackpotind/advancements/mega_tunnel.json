@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:tnt"
+    },
+    "title": {
+      "translate": "advancements.jackpotind.mega_tunnel.title"
+    },
+    "description": {
+      "translate": "advancements.jackpotind.mega_tunnel.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "code": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "jackpotind:tunnel",
+  "rewards": {
+    "experience": 300
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "criteria": {
+    "tick": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "rewards": {
+    "recipes": [
+      "jackpotind:jackpot_machine",
+      "jackpotind:tunnel_drill"
+    ]
+  }
+}

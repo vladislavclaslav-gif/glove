@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:diamond_block"
+    },
+    "title": {
+      "translate": "advancements.jackpotind.jackpot.title"
+    },
+    "description": {
+      "translate": "advancements.jackpotind.jackpot.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "code": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "jackpotind:lucky",
+  "rewards": {
+    "experience": 1000
+  }
+}

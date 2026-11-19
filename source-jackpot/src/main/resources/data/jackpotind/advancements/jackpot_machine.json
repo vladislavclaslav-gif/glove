@@ -1,0 +1,32 @@
+{
+  "display": {
+    "icon": {
+      "item": "jackpotind:jackpot_machine"
+    },
+    "title": {
+      "translate": "advancements.jackpotind.jackpot_machine.title"
+    },
+    "description": {
+      "translate": "advancements.jackpotind.jackpot_machine.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "has": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jackpotind:jackpot_machine"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "parent": "jackpotind:root"
+}

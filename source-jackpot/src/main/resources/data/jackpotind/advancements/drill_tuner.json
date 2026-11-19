@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:comparator"
+    },
+    "title": {
+      "translate": "advancements.jackpotind.drill_tuner.title"
+    },
+    "description": {
+      "translate": "advancements.jackpotind.drill_tuner.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "code": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "jackpotind:tunnel_drill"
+}

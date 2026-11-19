@@ -1,0 +1,50 @@
+{
+  "display": {
+    "icon": {
+      "item": "jackpotind:jackpot_machine"
+    },
+    "title": {
+      "translate": "advancements.jackpotind.root.title"
+    },
+    "description": {
+      "translate": "advancements.jackpotind.root.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "minecraft:textures/block/purple_concrete.png"
+  },
+  "criteria": {
+    "m": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jackpotind:jackpot_machine"
+            ]
+          }
+        ]
+      }
+    },
+    "d": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "jackpotind:tunnel_drill"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "m",
+      "d"
+    ]
+  ]
+}
